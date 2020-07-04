@@ -35,4 +35,21 @@ object FirebaseManager {
     fun uploadNewsToFirebase(link: String, idNews: Int) {
         newsRef.child(idNews.toString()).child("img").setValue(link)
     }
+
+    fun uploadLongNewsToFirebase(
+        title: String?,
+        date: String?,
+        content: String?,
+        link: String,
+        idNews: Int
+    ) {
+        if (!title.isNullOrBlank() &&
+            !date.isNullOrBlank() &&
+            !content.isNullOrBlank() &&
+            !link.isBlank())
+        newsRef.child(idNews.toString()).child("title").setValue(title)
+        newsRef.child(idNews.toString()).child("content").setValue(content)
+        newsRef.child(idNews.toString()).child("date").setValue(date)
+        newsRef.child(idNews.toString()).child("img").setValue(link)
+    }
 }
