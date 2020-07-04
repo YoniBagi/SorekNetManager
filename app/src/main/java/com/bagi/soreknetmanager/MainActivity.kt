@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     var urlLD = MutableLiveData<String>()
     var imagesUri = ArrayList<Uri>()
     var imagesStringPath = ArrayList<String?>()
-    var lastIdNews: Int? = null
+    var lastIdNewsLD = MutableLiveData<Int>()
 
     @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(IO).launch {
             withContext(IO) {
                 FirebaseManager.getLastNumber().collect {
-                    lastIdNews = it.toInt()
+                    lastIdNewsLD.postValue(it.toInt())
                 }
             }
         }
@@ -111,11 +111,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun uploadNewsToFirebase(link: String) {
-        lastIdNews?.let {
+        lastIdNewsLD.value?.let {
             FirebaseManager.uploadNewsToFirebase(link, it - 1)
-            lastIdNews = it - 1
+            lastIdNewsLD.value = it - 1
             return
         }
-        Toast.makeText(this, "lastIdNews $lastIdNews", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "lastIdNews $lastIdNewsLD", Toast.LENGTH_LONG).show()
     }
 }
